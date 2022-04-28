@@ -40,6 +40,12 @@ def getRoutes(request):
             'method': 'PUT',
             'body': None,
             'description': 'Updates existing dna with parameters passed in'
+        },
+        {
+           'Endpoint': '/dna/id/delete',
+            'method': 'DELETE',
+            'body': None,
+            'description': 'Deletes dna with the given primary key' 
         }
     ]
     return Response(request)
@@ -81,3 +87,15 @@ def computeDna(request, primary_key, computation):
 @api_view(["POST"])
 def createDna(request, primary_key):
     return Response("idk")
+
+@api_view(["DELETE"])
+def deleteDna(request, primary_key):
+    dna = Dna.objects.get(id=primary_key)
+    dna.delete()
+    return Response("deleted")
+
+
+@api_view(["POST"])
+def createDna(request, given_name, given_sequence):
+    dna = Dna.objects.create(name=given_name, sequence=given_sequence)
+    return Response("created")

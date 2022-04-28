@@ -27,3 +27,7 @@ class Dna(models.Model):
         compute_method = methods[computation]
         returned_dna = compute_method(dna)
         return returned_dna[:10] + "..." if len(returned_dna) > 10 else returned_dna
+    
+    def create(self, given_name, given_sequence):
+        new_dna = self.create(name=given_name, sequence=given_sequence)
+        print(new_dna)
