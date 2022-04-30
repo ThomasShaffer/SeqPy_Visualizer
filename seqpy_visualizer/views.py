@@ -64,14 +64,11 @@ def getDna(request, primary_key):
 
 @api_view(['PUT'])
 def updateDna(request, primary_key):
-    data = request.data
-    print(data)
+    name, sequence = str(request.body,'utf-8').split(',')
     dna = Dna.objects.get(id=primary_key)
-    serializer = DnaSerializer(instance=dna, data=data)
-    if serializer.is_valid():
-        serializer.save()
+    dna.update(name, sequence)
 
-    return Response(serializer.data)
+    return Response("202")
 
 @api_view(['GET'])
 def computeDna(request, primary_key, computation):

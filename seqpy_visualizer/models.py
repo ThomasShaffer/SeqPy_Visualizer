@@ -31,3 +31,10 @@ class Dna(models.Model):
     def create(self, given_name, given_sequence):
         new_dna = self.create(name=given_name, sequence=given_sequence)
         print(new_dna)
+
+    def update(self, new_name, new_sequence):
+        if self.name != new_name:
+            self.name = new_name
+        if self.sequence != new_sequence:
+            self.sequence = new_sequence
+        self.save()
