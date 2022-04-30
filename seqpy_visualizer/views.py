@@ -10,7 +10,7 @@ def index(request):
     return getRoutes(request)
 
 
-@api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
+@api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def getRoutes(request):
 
     routes = [
@@ -62,9 +62,10 @@ def getDna(request, primary_key):
     serializer = DnaSerializer(dna, many=False)
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['PUT'])
 def updateDna(request, primary_key):
     data = request.data
+    print(data)
     dna = Dna.objects.get(id=primary_key)
     serializer = DnaSerializer(instance=dna, data=data)
     if serializer.is_valid():
@@ -72,21 +73,14 @@ def updateDna(request, primary_key):
 
     return Response(serializer.data)
 
-#TODO: MUST CHANGE LOGIC IN VIEWS AND SEND IT TO MODELS.PY
 @api_view(['GET'])
 def computeDna(request, primary_key, computation):
     pre_dna = Dna.objects.get(id=primary_key)
-    print(pre_dna)
     try: 
         computedDna = pre_dna.compute(computation)
         return Response(computedDna)
-    except:
-        Exception
-        return Response("ERROR")
-
-@api_view(["POST"])
-def createDna(request, primary_key):
-    return Response("idk")
+    except Exception as e:
+        return Response(str(e))
 
 @api_view(["DELETE"])
 def deleteDna(request, primary_key):
@@ -96,6 +90,7 @@ def deleteDna(request, primary_key):
 
 
 @api_view(["POST"])
-def createDna(request, given_name, given_sequence):
-    dna = Dna.objects.create(name=given_name, sequence=given_sequence)
+def createDna(request):
+    given_name, given_dna = str(request.body, 'utf-8').split(",")
+    dna = Dna.objects.create(name=given_name, sequence=given_dna)
     return Response("created")
